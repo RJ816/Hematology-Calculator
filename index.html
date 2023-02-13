@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+<link href="files/styles.css" rel="stylesheet">
+<link href="files/print.css" rel="stylesheet" media="print">
+
+<title>Hematology Calculator</title>
+
+<body class="container-fluid pb-3" style="background-color: #fdfdfd">
+  <div class="row mx-1">
+    <div class="col-12 py-2 px-3">
+      <div class="row">
+        <div class="col">
+          <h1 class="display-1 text-center py-1">Hematology Calculator</h1>
+        </div>
+      </div>
+      <div class="row pb-1">
+        <div class="col text-center">
+          <button type="button" class="btn btn-secondary btn-sm hide-button" onClick="window.print()">
+            Print
+          </button>
+          <button type="button" class="btn btn-danger btn-sm hide-button" onClick="location.reload()" data-bs-toggle="modal" data-bs-target="#loadModal">
+            Reset
+          </button>
+          <div class="modal fade" id="loadModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="show-block" style="display:none">Print Date: <script>
+              document.write(new Date());
+            </script>
+          </p>
+        </div>
+      </div>
+      <div class="row p-2 shadow rounded bg-white">
+        <div class="col-12 col-xl-4">
+          <div class="row d-flex justify-content-center">
+            <div class="col">
+              <h2 class="text-center border-bottom border-2">Dilution Factor</h2>
+              <p>Select dilution factor below to start.</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <select id="dilutionFactor" onchange="dilutionAmounts(this.value)" class="input-select-color">
+                <option value="select">Select dilution</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="5">5</option>
+              </select>
+              <label for="dilutionFactor" class="text-secondary">*REQUIRED FOR DILUTION VALIDATION</label>
+            </div>
+            <div class="col-12">
+              <div class="row pb-1 text-end">
+                <div class="col-7"></div>
+                <div class="col fst-italic">Recommend</div>
+              </div>
+              <div class="row pb-1">
+                <div class="col-8 text-right px-0" style="padding-right: 3px!important;">Volume of Blood to Use (ul)</div>
+                <div id="bloodVolumeResult" class="col border fw-bold"></div>
+              </div>
+              <div class="row pb-1">
+                <div class="col-8 text-right px-0" style="padding-right: 3px!important;">Volume of Cellpack (ul)</div>
+                <div id="cellpackVolumeResult" class="col border fw-bold"></div>
+              </div>
+              <div class="row pb-1">
+                <div class="col-8 text-right px-0" style="padding-right: 3px!important;">Total Volume (ul)</div>
+                <div id="totalVolumeResult" class="col border fw-bold"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-xl-8">
+          <div class="row d-flex justify-content-center">
+            <div class="col">
+              <h2 class="text-center border-bottom border-2">Dilution Validation</h2>
+            </div>
+          </div>
+          <div class="row pb-1">
+            <div class="col-2">
+            </div>
+            <div class="col-1">
+            </div>
+            <div class="col-2">
+              <p style="font-size: .75em">Value from Original Run</p>
+            </div>
+            <div class="col-2">
+              <p style="font-size: .75em">Raw Value from Dilution Run</p>
+            </div>
+            <div class="col-2">
+              <p style="font-size: .75em">Dilution Acceptable Range (+/-15%)</p>
+            </div>
+            <div class="col-1">
+              <p style="font-size: .75em">Calculated Value</p>
+            </div>
+            <div class="col-2">
+              <p style="font-size: .75em">Dilution Valid? (WBC or PLT within range)</p>
+            </div>
+          </div>
+          <div class="row pb-1">
+            <div class="col-2 d-flex justify-content-end align-items-end text-right" style="font-size: .75em">
+              DILUTION VALIDATION
+            </div>
+            <div class="col-1">
+              WBC
+            </div>
+            <div class="col-2 px-0" style="padding-right:3px!important">
+              <input type="number" id="originalWbc" oninput="wbcDilutionRangeCalc(this.id)" placeholder="Enter Value" class="w-100 fw-bold input-background-color">
+            </div>
+            <div class="col-2 px-0" style="padding-right:3px!important">
+              <input type="number" id="rawWbc" oninput="wbcCalcDilution(this.id)" placeholder="Enter Value" class="w-100 fw-bold input-background-color">
+            </div>
+            <div class="col-2 px-0">
+              <input type="text" id="wbcDilutionRange" class="w-100 text-center hide-input-border" readonly>
+            </div>
+            <div class="col-1 px-0">
+              <input type="number" id="wbcCalculatedDilution" class="w-100 text-secondary hide-input-border" readonly>
+            </div>
+            <div class="col-2 px-0">
+              <div class="col text-center valid-grow fw-bold" id="validationGrade"></div>
+            </div>
+          </div>
+          <div class="row pb-1">
+            <div class="col-2">
+            </div>
+            <div class="col-1">
+              PLT
+            </div>
+            <div class="col-2 px-0" style="padding-right:3px!important">
+              <input type="number" id="originalPlt" oninput="pltDilutionRangeCalc(this.id)" placeholder="Enter Value" class="w-100 fw-bold input-background-color">
+            </div>
+            <div class="col-2 px-0" style="padding-right:3px!important">
+              <input type="number" id="rawPlt" oninput="pltCalcDilution(this.id)" placeholder="Enter Value" class="w-100 fw-bold input-background-color">
+            </div>
+            <div class="col-2 px-0">
+              <input type="text" id="pltDilutionRange" class="w-100 text-center hide-input-border" readonly>
+            </div>
+            <div class="col-1 px-0">
+              <input type="number" id="pltCalculatedDilution" class="w-100 text-secondary hide-input-border" readonly>
+            </div>
+            <div class="col-2 px-0">
+            </div>
+          </div>
+          <div class="row pb-1">
+            <div class="col-2 d-flex justify-content-end align-items-center text-right" style="font-size: .75em">
+              RBC AGGLUTINATION OR TURBIDITY
+            </div>
+            <div class="col-1">
+              HGB
+            </div>
+            <div class="col-2 px-0" style="padding-right:3px!important">
+              <input type="number" id="originalHgb" placeholder="Enter Value" class="w-100 fw-bold input-background-color">
+            </div>
+            <div class="col-2 px-0" style="padding-right:3px!important">
+              <input type="number" id="rawHgb" oninput="hgbCalcDilution(this.id)" placeholder="Enter Value" class="w-100 fw-bold input-background-color">
+            </div>
+            <div class="col-2 px-0">
+            </div>
+            <div class="col-1 px-0">
+              <input type="number" id="hgbCalculatedDilution" class="w-100 result" readonly>
+            </div>
+            <div class="col-2 px-0">
+            </div>
+          </div>
+          <div class="row pb-1">
+            <div class="col-2 d-flex justify-content-end align-items-center text-right" style="font-size: .75em">
+              ABOVE LINEARITY
+            </div>
+            <div class="col-1">
+              WBC
+            </div>
+            <div class="col-2 px-0" style="padding-right:3px!important">
+              <input type="number" id="originalHighWbc" placeholder="Enter Value" class="w-100 fw-bold input-background-color">
+            </div>
+            <div class="col-2 px-0" style="padding-right:3px!important">
+              <input type="number" id="rawHighWbc" oninput="highWbcCalcDilution(this.id)" placeholder="Enter Value" class="w-100 fw-bold input-background-color">
+            </div>
+            <div class="col-2 px-0">
+            </div>
+            <div class="col-1 px-0">
+              <input type="number" id="highWbcCalculatedDilution" class="w-100 result" readonly>
+            </div>
+            <div class="col-2 px-0">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 py-2">
+      <div class="row">
+        <div id="halfdiv" class="col-12 col-lg-6 px-3 pb-2">
+          <div class="row d-flex justify-content-center">
+            <div class="col shadow rounded bg-white">
+              <div class="row">
+                <div class="col">
+                  <h2 class="text-center text-danger border-bottom border-2">Plasma Blank</h2>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col d-flex justify-content-center pb-2">
+                  <img src="images/blank.png" alt="plasma blank" class="img-fluid">
+                </div>
+              </div>
+              <div class="row pb-2">
+                <div class="col d-flex justify-content-center">
+                  <div class="hide-button">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#myModal">
+                      Click for Example
+                    </button>
+                  </div>
+                  <div class="modal" id="myModal" style="display: none;" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Order of Operations</h4>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Initial Hct=40, Plasma Blank Hgb=1, Initial Hgb=15
+                          </p>
+                          <p>1. 40 / 100 = 0.4</p>
+                          <p>2. 1 - 0.4 = 0.6</p>
+                          <p>3. 0.6 x 1 = 0.6</p>
+                          <p>4. 15 - 0.6 = 14.4 = <em>Corrected Hgb</em></p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row pb-1">
+                <div class="col-3 px-1 text-right">
+                  Initial Hgb
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="initialHgb" oninput="plasmaBlankCalc()" placeholder="Enter Value" class="w-100 right fw-bold input-background-color">
+                </div>
+                <div class="col-1 px-1 text-left">
+                  g/dL
+                </div>
+                <div class="col-3 px-1 text-right">
+                  Corrected Hgb
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="correctedHgb" class="w-100 result right" readonly>
+                </div>
+                <div class="col-1 px-1 text-left">
+                  g/dL
+                </div>
+              </div>
+              <div class="row pb-1">
+                <div class="col-3 px-1 text-right">
+                  Initial Hct
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="initialHct" oninput="plasmaBlankCalc()" placeholder="Enter Value" class="w-100 right fw-bold input-background-color">
+                </div>
+                <div class="col-1 px-1 text-left">
+                  %
+                </div>
+                <div class="col-6 px-1">
+                </div>
+              </div>
+              <div class="row pb-1">
+                <div class="col-3 px-1 text-right">
+                  Plasma Blank Hgb
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="plasmaBlankHgb" oninput="plasmaBlankCalc()" placeholder="Enter Value" class="w-100 right fw-bold input-background-color">
+                </div>
+                <div class="col-1 px-1 text-left">
+                  g/dL
+                </div>
+                <div class="col-6 px-1">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="halfdiv" class="col-12 col-lg-6 px-3">
+          <div class="row d-flex justify-content-center">
+            <div class="col shadow rounded bg-white">
+              <div class="row">
+                <div class="col">
+                  <h2 class="text-center text-danger border-bottom border-2">Corrected WBC Count</h2>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col d-flex justify-content-center pb-2">
+                  <img src="images/wbc.png" alt="corrected wbc" class="img-fluid">
+                </div>
+              </div>
+              <div class="row d-flex justify-content-center pb-1">
+                <div class="col-5 px-1 text-right">
+                  Uncorrected WBC (TNC-N)
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="tnc" oninput="correctedWbcCalc()" placeholder="Enter Value" class="w-100 right fw-bold input-background-color">
+                </div>
+                <div class="col-2 px-1 text-left">
+                  x10<sup>3</sup>
+                </div>
+              </div>
+              <div class="row d-flex justify-content-center pb-1">
+                <div class="col-5 px-1 text-right">
+                  NRBC
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="nrbc" oninput="correctedWbcCalc()" placeholder="Enter Value" class="w-100 right fw-bold input-background-color">
+                </div>
+                <div class="col-2 px-1 text-left">
+                  %
+                </div>
+              </div>
+              <div class="row d-flex justify-content-center pb-1">
+                <div class="col-5 px-1 text-right">
+                  Corrected WBC
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="correctedWbc" class="w-100 result right" readonly>
+                </div>
+                <div class="col-2 px-1 text-left">
+                  x10<sup>3</sup>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 py-2">
+      <div class="row">
+        <div id="halfdiv" class="col-12 col-lg-6 px-0">
+          <div class="row d-flex justify-content-center m-1">
+            <div class="col shadow rounded py-2 bg-white">
+              <div class="row">
+                <div class="col">
+                  <h2 class="text-center text-danger border-bottom border-2">RBC Indices</h2>
+                </div>
+              </div>
+              <div class="row pb-2">
+                <div class="col d-flex justify-content-center pb-2">
+                  <img src="images/rbc.png" alt="rbc indices" class="img-fluid">
+                </div>
+              </div>
+              <div class="row pb-1">
+                <div class="col-2 px-1 text-right">
+                  RBC
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="iRbc" oninput="indicesCalc()" placeholder="Enter Value" class="w-100 right fw-bold input-background-color">
+                </div>
+                <div class="col-2 px-1 text-left">
+                  x10<sup>6</sup>
+                </div>
+                <div class="col-2 px-1 text-right">
+                  MCH
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="iMch" class="w-100 result right" readonly>
+                </div>
+                <div class="col-2 px-1 text-left">
+                  pg
+                </div>
+              </div>
+              <div class="row pb-1">
+                <div class="col-2 px-1 text-right">
+                  HGB
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="iHgb" oninput="indicesCalc()" placeholder="Enter Value" class="w-100 right fw-bold input-background-color">
+                </div>
+                <div class="col-2 px-1 text-left">
+                  g/dL
+                </div>
+                <div class="col-2 px-1 text-right">
+                  MCV
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="iMcv" class="w-100 result right" readonly>
+                </div>
+                <div class="col-2 px-1 text-left">
+                  fL
+                </div>
+              </div>
+              <div class="row pb-1">
+                <div class="col-2 px-1 text-right">
+                  HCT
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="iHct" oninput="indicesCalc()" placeholder="Enter Value" class="w-100 right fw-bold input-background-color">
+                </div>
+                <div class="col-2 px-1 text-left">
+                  %
+                </div>
+                <div class="col-2 px-1 text-right">
+                  MCHC
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="iMchc" class="w-100 result right" readonly>
+                </div>
+                <div class="col-2 px-1 text-left">
+                  g/dL
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="halfdiv" class="col-12 col-lg-6 px-0">
+          <div class="row d-flex justify-content-center m-1">
+            <div class="col shadow rounded py-2 bg-white">
+              <div class="row">
+                <div class="col">
+                  <h2 class="text-center text-danger border-bottom border-2">Absolute Neutrophil Count (ANC)</h2>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col d-flex justify-content-center pb-2">
+                  <img src="images/anc.png" alt="anc" class="img-fluid">
+                </div>
+              </div>
+              <div class="row pb-1">
+                <div class="col-4 px-1 text-right">
+                  WBC
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="ancWBC" oninput="ancCalc()" placeholder="Enter Value" class="w-100 right fw-bold input-background-color">
+                </div>
+                <div class="col-1 px-1 text-left">
+                  x10<sup>3</sup>
+                </div>
+                <div class="col-1 px-1 text-right">
+                  ANC
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="anc" class="w-100 result right" readonly>
+                </div>
+                <div class="col-2 px-1 text-left">
+                  x10<sup>3</sup>
+                </div>
+              </div>
+              <div class="row pb-1">
+                <div class="col-4 px-1 text-right">
+                  Segmented Neut %
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="seg" oninput="ancCalc()" placeholder="Enter Value" class="w-100 right fw-bold input-background-color">
+                </div>
+                <div class="col-1 px-1 text-left">
+                  %
+                </div>
+                <div class="col-5 px-1 text-right">
+                </div>
+              </div>
+              <div class="row pb-1">
+                <div class="col-4 px-1 text-right">
+                  Band %
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="band" oninput="ancCalc()" placeholder="Enter Value" class="w-100 right fw-bold input-background-color">
+                </div>
+                <div class="col-1 px-1 text-left">
+                  %
+                </div>
+                <div class="col-5 px-1 text-right">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 py-2">
+      <div class="row">
+        <div class="col-12 px-3">
+          <div class="row d-flex justify-content-center">
+            <div class="col bg-white shadow rounded py-2">
+              <div class="row">
+                <div class="col">
+                  <h2 class="text-center text-danger border-bottom border-2">Absolute Count of All Other Diff Cells</h2>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col d-flex justify-content-center pb-2">
+                  <img src="images/cells.png" alt="other cells" class="img-fluid">
+                </div>
+              </div>
+              <div class="row d-flex justify-content-center pb-1">
+                <div class="col-3 px-1 text-right">
+                  WBC
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="otherWBC" oninput="altWbcCalc()" placeholder="Enter Value" class="w-100 right fw-bold input-background-color">
+                </div>
+                <div class="col-2 px-1 text-left">
+                  x10<sup>3</sup>
+                </div>
+              </div>
+              <div class="row d-flex justify-content-center pb-1">
+                <div class="col-3 px-1 text-right">
+                  Cell %
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="otherWbcPerct" oninput="altWbcCalc()" placeholder="Enter Value" class="w-100 right fw-bold input-background-color">
+                </div>
+                <div class="col-2 px-1 text-left">
+                  %
+                </div>
+              </div>
+              <div class="row d-flex justify-content-center pb-1">
+                <div class="col-3 px-1 text-right">
+                  Absolute Count
+                </div>
+                <div class="col-2 px-0">
+                  <input type="number" id="otherAbsCount" class="w-100 result right" readonly="">
+                </div>
+                <div class="col-2 px-1 text-left">
+                  x10<sup>3</sup>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+<script src="files/scripts.js"></script>
+
+</html>
