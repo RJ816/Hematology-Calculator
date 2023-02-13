@@ -1,0 +1,45 @@
+html {
+  font-size: .6em;
+}
+
+img {
+  display: hidden;
+}
+
+body {
+  background-color: #FFFFFF;
+}
+
+img.other-cells {
+  width: 25%;
+  height: auto;
+}
+
+.hide-button {
+  display: none;
+}
+
+.show-block{
+  display: block!important;
+}
+
+#halfdiv {
+ width: 50%;
+}
+
+input {
+  border-style: solid;
+  border-color: black;
+}
+
+.input-select-color {
+  background-color: yellow;
+}
+
+.input-background-color {
+  background-color: yellow;
+}
+
+.result {
+  background-color: yellow;
+}

@@ -1,0 +1,60 @@
+html {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+div.process-shrink {
+  font-size: .7em;
+}
+
+div.dilution-validation-header-shrink {
+  font-size: .75em;
+}
+
+div.valid-grow {
+  font-size: 1.75em;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.pass {
+  background-color: rgb(163, 236, 163);
+}
+
+.fail {
+  background-color: red;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input.right {
+  text-align: right;
+}
+
+.input-select-color {
+  background-color: yellow;
+}
+
+.input-background-color {
+  background-color: rgba(176, 232, 241, 0.952);
+}
+
+input {
+  border-color:rgba(163, 171, 175, 0.952);
+}
+
+input.hide-input-border {
+  border: hidden;
+}
+
+.result {
+  background-color: rgb(163, 236, 163);
+}
+
+div.corrected-shrink {
+  font-size: .9em;
+}
