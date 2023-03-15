@@ -23,7 +23,7 @@ img.other-cells {
   display: block!important;
 }
 
-#halfdiv {
+.halfdiv {
  width: 50%;
 }
 
