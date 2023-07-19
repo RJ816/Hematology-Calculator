@@ -27,8 +27,8 @@ function dilutionAmounts(value){
 
 function wbcDilutionRangeCalc(id) {
   let input = document.getElementById(id).value;
-  let dilutionRangeLow = Math.round((input * 0.85 + Number.EPSILON) * 100) / 100;
-  let dilutionRangeHigh = Math.round((input * 1.15 + Number.EPSILON) * 100) / 100;
+  let dilutionRangeLow = Math.round((input * 0.85) * 100) / 100;
+  let dilutionRangeHigh = Math.round((input * 1.15) * 100) / 100;
   let dilutionRange = String(dilutionRangeLow+"-"+dilutionRangeHigh)
   document.getElementById("wbcDilutionRange").value = dilutionRange;
   validationGrade();
@@ -37,15 +37,15 @@ function wbcDilutionRangeCalc(id) {
 function wbcCalcDilution(id) {
   let input = document.getElementById(id).value;
   let dilution = document.getElementById("dilutionFactor").value;
-  let calcDilution = Math.round((input * dilution + Number.EPSILON) * 100) / 100;
+  let calcDilution = Math.round((input * dilution) * 100) / 100;
   document.getElementById("wbcCalculatedDilution").value = calcDilution;
   validationGrade();
 }
 
 function pltDilutionRangeCalc(id) {
   let input = document.getElementById(id).value;
-  let dilutionRangeLow = Math.round((input * 0.85 + Number.EPSILON) * 100) / 100;
-  let dilutionRangeHigh = Math.round((input * 1.15 + Number.EPSILON) * 100) / 100;
+  let dilutionRangeLow = Math.round((input * 0.85) * 100) / 100;
+  let dilutionRangeHigh = Math.round((input * 1.15) * 100) / 100;
   let dilutionRange = String(dilutionRangeLow+"-"+dilutionRangeHigh)
   document.getElementById("pltDilutionRange").value = dilutionRange;
   validationGrade();
@@ -54,7 +54,7 @@ function pltDilutionRangeCalc(id) {
 function pltCalcDilution(id) {
   let input = document.getElementById(id).value;
   let dilution = document.getElementById("dilutionFactor").value;
-  let calcDilution = Math.round((input * dilution + Number.EPSILON) * 100) / 100;
+  let calcDilution = Math.round(input * dilution * 100) / 100;
   document.getElementById("pltCalculatedDilution").value = calcDilution;
   validationGrade();
 }
@@ -62,14 +62,14 @@ function pltCalcDilution(id) {
 function hgbCalcDilution(id) {
   let input = document.getElementById(id).value;
   let dilution = document.getElementById("dilutionFactor").value;
-  let calcDilution = Math.round((input * dilution + Number.EPSILON) * 100) / 100;
+  let calcDilution = Math.round(input * dilution * 100) / 100;
   document.getElementById("hgbCalculatedDilution").value = calcDilution;
 }
 
 function highWbcCalcDilution(id) {
   let input = document.getElementById(id).value;
   let dilution = document.getElementById("dilutionFactor").value;
-  let calcDilution = Math.round((input * dilution + Number.EPSILON) * 100) / 100;
+  let calcDilution = Math.round(input * dilution * 100) / 100;
   document.getElementById("highWbcCalculatedDilution").value = calcDilution;
 }
 
@@ -108,7 +108,7 @@ function plasmaBlankCalc() {
   let initialHgb = document.getElementById("initialHgb").value;
   let initialHct = document.getElementById("initialHct").value;
   let plasmaBlank = document.getElementById("plasmaBlankHgb").value;
-  let calc = Math.round(((initialHgb-((1-(initialHct/100))*plasmaBlank)) + Number.EPSILON) * 100) / 100;
+  let calc = Math.round((initialHgb-((1-(initialHct/100))*plasmaBlank)) * 100) / 100;
   document.getElementById("correctedHgb").value = calc;
 }
 
@@ -116,7 +116,7 @@ function correctedWbcCalc() {
   let tnc = document.getElementById("tnc").value;
   let nrbc = document.getElementById("nrbc").value;
   nrbc = parseFloat(nrbc,10);
-  let calc = Math.round((((tnc*100)/(nrbc+100)) + Number.EPSILON) * 100) / 100;
+  let calc = Math.round(((tnc*100)/(nrbc+100)) * 100) / 100;
   document.getElementById("correctedWbc").value = calc;
 }
 
@@ -125,9 +125,9 @@ function indicesCalc() {
   let ihgb = document.getElementById("iHgb").value;
   let ihct = document.getElementById("iHct").value;
 
-  let calcmch = Math.round((((ihgb/irbc)*10) + Number.EPSILON) * 100) / 100;
-  let calcmcv = Math.round((((ihct/irbc)*10) + Number.EPSILON) * 100) / 100;
-  let calcmchc = Math.round((((ihgb/ihct)*100) + Number.EPSILON) * 100) / 100;
+  let calcmch = Math.round(((ihgb/irbc)*10) * 100) / 100;
+  let calcmcv = Math.round(((ihct/irbc)*10) * 100) / 100;
+  let calcmchc = Math.round(((ihgb/ihct)*100) * 100) / 100;
 
   document.getElementById("iMch").value = calcmch;
   document.getElementById("iMcv").value = calcmcv;
@@ -138,9 +138,9 @@ function ancCalc() {
   let wbc = document.getElementById("ancWBC").value;
   let seg = document.getElementById("seg").value;
   let band = document.getElementById("band").value;
-  neut = parseInt(seg,10)+parseInt(band,10)
+  neut = parseFloat(seg,10)+parseFloat(band,10)
 
-  let calc = Math.round(((((neut)*wbc)/100) + Number.EPSILON) * 100) / 100;
+  let calc = Math.round(((neut*wbc)/100) * 100) / 100;
  
   document.getElementById("anc").value = calc;
 }
@@ -149,7 +149,7 @@ function altWbcCalc() {
   let wbc = document.getElementById("otherWBC").value;
   let perct = document.getElementById("otherWbcPerct").value;
 
-  let calc = Math.round((((perct*wbc)/100) + Number.EPSILON) * 100) / 100;
+  let calc = Math.round(((perct*wbc)/100) * 100) / 100;
  
   document.getElementById("otherAbsCount").value = calc;
 }
